@@ -44,7 +44,7 @@ module CelebrityFinderModule
 
       while !(C == {})
         // Following invariants hold in every iteration:
-        
+
         // a needs to a person from people
         invariant a in people
         // C has to be the size of people or less
@@ -52,7 +52,7 @@ module CelebrityFinderModule
         // Current a or another person remaining in C must be a celebrity
         invariant exists c | c in (C + {a}) :: isCelebrity(people, c)
         // Removed people must all know who the celebrity is (whoever they are from C + {a})
-        invariant forall p | p in (people - C - {a}) :: exists c | c in C + {a} :: knows(p, c)
+        invariant forall p | p in (people - C - {a}) :: exists c | c in (C + {a}) :: knows(p, c)
         decreases |C|
       {
         var b: Person :| b in C;
