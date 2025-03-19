@@ -31,8 +31,8 @@ method SelectionSortAlternative(a: array<int>)
 
       invariant n < m <= a.Length
       invariant forall i :: n <= i < m ==> a[n] <= a[i]
-      invariant multiset(a[..]) == old(multiset(a[..])) // need here?
-      invariant forall i, j :: 0 <= i < j < n ==> a[i] <= a[j] // need here?
+      invariant multiset(a[..]) == old(multiset(a[..]))
+      invariant forall i, j :: 0 <= i < j < n ==> a[i] <= a[j]
       invariant SplitPoint(a, n)
 
       {
@@ -42,9 +42,7 @@ method SelectionSortAlternative(a: array<int>)
 
         m := m + 1;
       }
-      // a[n], a[mindex] := a[mindex], a[n];
-
-
+      
     // END-TODO(inner-loop)
     n := n + 1;
   }

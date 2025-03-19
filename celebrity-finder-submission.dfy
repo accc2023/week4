@@ -33,36 +33,26 @@ module CelebrityFinderModule
   method FindCelebrity(people: People) returns (result: Person)
 // BEGIN-TODO(FindCelebrity)
 // Implement the `FindCelebrity` method according to the instructions.
-    requires exists c :: isCelebrity(people, c)
-    requires |people| > 0 // since at least one celebrity is guarenteed
-    ensures isCelebrity(people, result)
+    // Set is not empty (we know since the instructions said that there has to be at least one celebrity)
+     requires |people| > 0
+     requires exists c :: c in people && isCelebrity(people, c)
+     ensures isCelebrity(people, result)
     {
       var C := people;
       var a : Person :| a in C;
       C := C - {a};
 
       while !(C == {})
+        // Following invariants hold in every iteration:
+        
+        // a needs to a person from people
         invariant a in people
+        // C has to be the size of people or less
         invariant C <= people
-        invariant (forall k | k in people - C && k != a :: !isCelebrity(people, k))
-        // invariant (exists c :: c in (C + {a}) && isCelebrity(people,c) && forall x :: x in people ==> (knows(x, c) && !knows(c, x)))
-
-
-
-
-        // invariant forall x :: x in (people - C) ==> (knows(x, a) && !knows(a, x))
-        // invariant forall x :: x in (people - C) && x != a ==> (knows(x, a)) &&
-          // forall x :: x in (people - C) && x != a ==> (!knows(a, x))
-        // invariant forall x :: x in (people - C) ==> !(knows(a, b))
-        // invariant !(knows(a, b))
-        // invariant (exists c :: c in people && isCelebrity(people, c))
-        //  ==> (forall x :: (x in (people - C) && x != a) ==> knows(x, a))
-        //  invariant forall x :: (x in (people - C) && x != a) ==> knows(x, a)
-        // invariant forall x :: x in (people - C) && x != a ==> (knows(x, a) && !knows(a, x))
-        // invariant (exists c :: c in people && isCelebrity(people, c))
-        //   ==> (forall y :: y in C ==> !knows(a, y))
-
-
+        // Current a or another person remaining in C must be a celebrity
+        invariant exists c | c in (C + {a}) :: isCelebrity(people, c)
+        // Removed people must all know who the celebrity is (whoever they are from C + {a})
+        invariant forall p | p in (people - C - {a}) :: exists c | c in C + {a} :: knows(p, c)
         decreases |C|
       {
         var b: Person :| b in C;
