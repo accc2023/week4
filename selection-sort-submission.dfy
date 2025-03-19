@@ -25,6 +25,26 @@ method SelectionSortAlternative(a: array<int>)
     // BEGIN-TODO(inner-loop)
     // use in the loop the following statement
     // a[n], a[m] := a[m], a[n];
+
+    // Set pointer to current element and then iterate throughout loop finding the minimum element
+    // Mark minimum element and then swap the elements and then set pointer to next element
+
+      invariant n < m <= a.Length
+      invariant forall i :: n <= i < m ==> a[n] <= a[i]
+      invariant multiset(a[..]) == old(multiset(a[..])) // need here?
+      invariant forall i, j :: 0 <= i < j < n ==> a[i] <= a[j] // need here?
+      invariant SplitPoint(a, n)
+
+      {
+        if (a[m] < a[n]) {
+          a[n], a[m] := a[m], a[n];
+        }
+
+        m := m + 1;
+      }
+      // a[n], a[mindex] := a[mindex], a[n];
+
+
     // END-TODO(inner-loop)
     n := n + 1;
   }

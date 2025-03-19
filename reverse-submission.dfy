@@ -30,7 +30,6 @@ method ReverseArray(a: array<int>)
               a[n] := a[a.Length - 1 - n];
               a[a.Length - 1 - n] := tmp;
               n := n + 1;
-
           }
 // END-TODO(IsCelebrity)
 }
